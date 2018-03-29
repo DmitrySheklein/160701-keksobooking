@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Дмитрий Щеклеин](https://up.htmlacademy.ru/javascript/13/user/160701).
-* Наставник: `Неизвестно`.
+* Наставник: [Вадим Протасов](https://htmlacademy.ru/profile/id616879).
 
 ---
 
