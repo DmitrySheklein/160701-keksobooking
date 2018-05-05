@@ -1,105 +1,9 @@
 "use strict";
 
-var generateAdsData = function(arr) {
-  for (var i = 0; i < ADS_QUANTITY; i++) {
-    var locationX = getRandomNum(300, 900);
-    var locationY = getRandomNum(150, 500);
-    arr.push({
-      author: {
-        avatar: "img/avatars/user0" + (i + 1) + ".png"
-      },
-      offer: {
-        title: OFFER_TITLES[i],
-        address: locationX + ", " + locationY,
-        price: getRandomNum(1000, 1000000),
-        type: offerTypesKeys[getRandomNum(0,offerTypesKeys.length)],
-        rooms: getRandomNum(1, 5),
-        guests: getRandomNum(1, 5),
-        checkin: getRandomData(OFFER_TIMES),
-        checkout: getRandomData(OFFER_TIMES),
-        features: generateArrayRandomLength(OFFER_FEATURES),
-        description: "",
-        photos: mixArray(OFFER_PHOTOS)
-      },
-      location: {
-        x: locationX,
-        y: locationY
-      }
-    });
-  }
-  return arr;
-};
 
-var listAdsData = generateAdsData(listAds);
+// var listAdsData = generateAdsData(listAds);
 
-var renderPins = function(arr) {
-  var mapPins = document.querySelector(".map__pins");
-  var pinTemplate = document.querySelector("template").content;
-
-  for (var i = 0; i < ADS_QUANTITY; i++) {
-    var pinItem = pinTemplate.querySelector('.map__pin').cloneNode(true);
-    pinItem.dataset.markerIndex = i;
-    pinItem.style.left = arr[i].location.x + "px";
-    pinItem.style.top = arr[i].location.y + "px";
-    pinItem.querySelector("img").src = arr[i].author.avatar;
-    pinItem.querySelector("img").alt = arr[i].offer.title;
-    mapPins.appendChild(pinItem);
-  }
-};
-
-
-var createAd = function(obj, index) {
-  var adTemplate = document
-    .querySelector("template")
-    .content.cloneNode(true)
-    .querySelector(".map__card");
-  var featuresContainer = adTemplate.querySelector(".popup__features");
-  var picturesContainer = adTemplate.querySelector(".popup__photos");
-  adTemplate.style.display = "none";
-  adTemplate.dataset.cardIndex = index;
-  adTemplate.querySelector(".popup__title").textContent = obj.offer.title;
-  adTemplate.querySelector(".popup__text--address").textContent = obj.offer.address;
-  adTemplate.querySelector(".popup__text--price").textContent = obj.offer.price + " ₽/ночь";
-  adTemplate.querySelector(".popup__type").textContent = OFFER_TYPES[obj.offer.type].name;
-  adTemplate.querySelector(".popup__text--capacity").textContent = obj.offer.rooms + " комнаты для " + obj.offer.guests + "гостей";
-  adTemplate.querySelector(".popup__text--time").textContent = "Заезд после " + obj.offer.checkin + ", выезд до " + obj.offer.checkout;
-  adTemplate.querySelector(".popup__description").textContent = obj.offer.description;
-  adTemplate.querySelector(".popup__avatar").src = obj.author.avatar;
-
-  removeChilds(featuresContainer);
-  removeChilds(picturesContainer);
-
-  for (var i = 0; i < obj.offer.features.length; i++) {
-    var featuresElement = document.createElement("li");
-    featuresElement.classList.add("popup__feature");
-    featuresElement.classList.add("popup__feature--" + obj.offer.features[i]);
-    featuresContainer.appendChild(featuresElement);
-  }
-
-  for (var j = 0; j < obj.offer.photos.length; j++) {
-    var pictureElement = document.createElement('img');
-    pictureElement.src = obj.offer.photos[j];
-    pictureElement.classList.add('popup__photo');
-    pictureElement.width = 45;
-    pictureElement.height = 40;
-    picturesContainer.appendChild(pictureElement)
-  }
-
-  return adTemplate;
-};
-
-var renderAds = function(listAdsData) {
-  var mapAdsFragment = document.createDocumentFragment();
-  var map = document.querySelector(".map");
-  var mapFilterContainer = map.querySelector(".map__filters-container");
-
-  for (let i = 0; i < listAdsData.length; i++) {
-    mapAdsFragment.appendChild(createAd(listAdsData[i], i));
-  }
-
-  return map.insertBefore(mapAdsFragment, mapFilterContainer);
-};
-
+var ADS_QUANTITY = 8;
 var mapMainPin = document.querySelector(".map__pin--main");
 var MAIN_PIN_WIDTH = 65;
 var MAIN_PIN_HEIGTH = 65;
@@ -137,8 +41,8 @@ var activatePage = function() {
   form.classList.remove("ad-form--disabled");
   disabledFields(false);
 
-  renderPins(listAdsData);
-  renderAds(listAdsData);
+  window.renderPins(window.generateData(ADS_QUANTITY));
+  window.renderAdverts(window.generateData(ADS_QUANTITY));
 
   var mapPins = document.querySelectorAll(".map__pin:not(.map__pin--main)");
 

@@ -52,4 +52,4 @@
   formCheckOut.addEventListener("change", formCheckHandler);
 
   formType.addEventListener("change", formTypeHandler);
-})()
+})();
