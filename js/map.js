@@ -34,29 +34,25 @@ var listAdsData = generateAdsData(listAds);
 
 var renderPins = function(arr) {
   var mapPins = document.querySelector(".map__pins");
-  var fragment = document.createDocumentFragment();
+  var pinTemplate = document.querySelector("template").content;
 
   for (var i = 0; i < ADS_QUANTITY; i++) {
-    var newPin = document.createElement("button");
-    newPin.classList = "map__pin";
-    newPin.style.left = arr[i].location.x + "px";
-    newPin.style.top = arr[i].location.y + "px";
-    newPin.innerHTML =
-      '<img src="' +
-      arr[i].author.avatar +
-      '" widht="40" height="40" draggble="false">';
-    newPin.dataset.markerIndex = i;
-    fragment.appendChild(newPin);
+    var pinItem = pinTemplate.querySelector('.map__pin').cloneNode(true);
+    pinItem.dataset.markerIndex = i;
+    pinItem.style.left = arr[i].location.x + "px";
+    pinItem.style.top = arr[i].location.y + "px";
+    pinItem.querySelector("img").src = arr[i].author.avatar;
+    pinItem.querySelector("img").alt = arr[i].offer.title;
+    mapPins.appendChild(pinItem);
   }
-  mapPins.appendChild(fragment);
 };
 
 
 var createAd = function(obj, index) {
   var adTemplate = document
     .querySelector("template")
-    .cloneNode(true)
-    .content.querySelector(".map__card");
+    .content.cloneNode(true)
+    .querySelector(".map__card");
   var featuresContainer = adTemplate.querySelector(".popup__features");
   var picturesContainer = adTemplate.querySelector(".popup__photos");
   adTemplate.style.display = "none";
@@ -74,14 +70,19 @@ var createAd = function(obj, index) {
   removeChilds(picturesContainer);
 
   for (var i = 0; i < obj.offer.features.length; i++) {
-    featuresContainer.innerHTML += '<li class="popup__feature popup__feature--' + obj.offer.features[i] + ' "></li>';
+    var featuresElement = document.createElement("li");
+    featuresElement.classList.add("popup__feature");
+    featuresElement.classList.add("popup__feature--" + obj.offer.features[i]);
+    featuresContainer.appendChild(featuresElement);
   }
 
   for (var j = 0; j < obj.offer.photos.length; j++) {
-    picturesContainer.innerHTML +=
-      '<img width="60px" height="30px" src=" ' +
-      obj.offer.photos[j] +
-      ' ">';
+    var pictureElement = document.createElement('img');
+    pictureElement.src = obj.offer.photos[j];
+    pictureElement.classList.add('popup__photo');
+    pictureElement.width = 45;
+    pictureElement.height = 40;
+    picturesContainer.appendChild(pictureElement)
   }
 
   return adTemplate;
@@ -181,6 +182,8 @@ var mapPinsOnClickRender = function(evt) {
 };
 
 mapMainPin.addEventListener("mouseup", mapMainPinMouseUpHandler);
-map.addEventListener("click", mapPinsOnClickRender);
+
+var mapPins = document.querySelector(".map__pins");
+mapPins.addEventListener("click", mapPinsOnClickRender);
 
 
