@@ -106,16 +106,6 @@ var MAIN_PIN_HEIGTH = 65;
 var map = document.querySelector(".map");
 var form = document.querySelector(".ad-form");
 
-
-var showMap = function() {
-  map.classList.remove("map--faded");
-};
-
-var showForm = function() {
-  form.classList.remove("ad-form--disabled");
-  disabledFields(false);
-};
-
 var disabledFields = function (boolean) {
   var fieldset = document.querySelectorAll("fieldset");
     for (var i = 0; i < fieldset.length; i++) {
@@ -143,11 +133,18 @@ var updateMapMainPinCoords = function() {
 };
 
 var activatePage = function() {
-  showMap();
-  showForm();
-  updateMapMainPinCoords();
+  map.classList.remove("map--faded");
+  form.classList.remove("ad-form--disabled");
+  disabledFields(false);
+
   renderPins(listAdsData);
   renderAds(listAdsData);
+
+  var mapPins = document.querySelectorAll(".map__pin:not(.map__pin--main)");
+
+  for (var i = 0; i < mapPins.length; i++) {
+    mapPins[i].addEventListener("click", mapPinsOnClickRender);
+  }
 };
 
 var mapPinsOnClickRender = function(evt) {
@@ -175,8 +172,6 @@ var mapPinsOnClickRender = function(evt) {
   }
 };
 
-var mapPins = document.querySelector(".map__pins");
-mapPins.addEventListener("click", mapPinsOnClickRender);
 
 mapMainPin.addEventListener("mousedown", function (evt) {
   evt.preventDefault();
