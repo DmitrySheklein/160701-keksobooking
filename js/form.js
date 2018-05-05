@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  // Валидация
+
   var form = document.querySelector(".ad-form");
   var formCheckIn = form.querySelector('#timein');
   var formCheckOut = form.querySelector('#timeout');
