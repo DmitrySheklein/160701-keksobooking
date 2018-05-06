@@ -9,6 +9,7 @@
   var formPrice = form.querySelector("#price");
   var formRooms = form.querySelector("#room_number");
   var formGuests = form.querySelector("#capacity");
+  var formResetBtn = form.querySelector(".ad-form__reset");
 
 
   var formCheckHandler = function (e) {
@@ -18,13 +19,14 @@
   }
 
   var formTypeHandler = function (e) {
-    var offerType = e.target.value;
-    if (Object.getOwnPropertyNames(OFFER_TYPES).includes(offerType)) {
-      formPrice.min = OFFER_TYPES[offerType].price;
-      formPrice.placeholder = OFFER_TYPES[offerType].price;
+    var targetOfferType = e.target.value;
+    var offerType = window.data.types;
+    if (Object.getOwnPropertyNames(offerType).includes(targetOfferType)) {
+      formPrice.min = offerType[targetOfferType].price;
+      formPrice.placeholder = offerType[targetOfferType].price;
     } else {
-      formPrice.min = '0';
-      formPrice.placeholder = '0';
+      formPrice.min = "0";
+      formPrice.placeholder = "0";
     }
   }
 
@@ -52,4 +54,12 @@
   formCheckOut.addEventListener("change", formCheckHandler);
 
   formType.addEventListener("change", formTypeHandler);
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+
+    window.backend.upload(new FormData(form), window.alert.success, window.alert.error);
+  });
+
+  formResetBtn.addEventListener('click', window.state.reset);
 })();

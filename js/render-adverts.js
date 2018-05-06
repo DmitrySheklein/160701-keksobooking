@@ -35,23 +35,29 @@
 
     removeChilds(featuresContainer);
     removeChilds(picturesContainer);
+    if (obj.offer.features.length > 0) {
+      for (var i = 0; i < obj.offer.features.length; i++) {
+          var featuresElement = document.createElement("li");
+          featuresElement.classList.add("popup__feature");
+          featuresElement.classList.add("popup__feature--" + obj.offer.features[i]);
+          featuresContainer.appendChild(featuresElement);
+        }
+      } else {
+        featuresContainer.remove();
+      }
 
-    for (var i = 0; i < obj.offer.features.length; i++) {
-      var featuresElement = document.createElement("li");
-      featuresElement.classList.add("popup__feature");
-      featuresElement.classList.add("popup__feature--" + obj.offer.features[i]);
-      featuresContainer.appendChild(featuresElement);
+    if (obj.offer.photos.length > 0) {
+      for (var j = 0; j < obj.offer.photos.length; j++) {
+        var pictureElement = document.createElement("img");
+        pictureElement.src = obj.offer.photos[j];
+        pictureElement.classList.add("popup__photo");
+        pictureElement.width = 45;
+        pictureElement.height = 40;
+        picturesContainer.appendChild(pictureElement);
+      }
+    } else {
+      picturesContainer.remove();
     }
-
-    for (var j = 0; j < obj.offer.photos.length; j++) {
-      var pictureElement = document.createElement("img");
-      pictureElement.src = obj.offer.photos[j];
-      pictureElement.classList.add("popup__photo");
-      pictureElement.width = 45;
-      pictureElement.height = 40;
-      picturesContainer.appendChild(pictureElement);
-    }
-
     return adTemplate;
   };
 
