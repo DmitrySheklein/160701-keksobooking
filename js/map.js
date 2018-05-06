@@ -19,8 +19,18 @@
     form.classList.remove("ad-form--disabled");
     window.util.changeDisabledFields(false);
 
-    window.backend.load(window.renderPins, window.alert.error);
-    window.backend.load(window.renderAdverts, window.alert.error);
+    var contentData;
+    var getContent = function (data) {
+      contentData = data;
+    }
+    window.backend.load(getContent, window.alert.error);
+
+    window.renderPins(contentData);
+    window.renderAdverts(contentData);
+
+
+    // window.backend.load(window.renderPins, window.alert.error);
+    // window.backend.load(window.renderAdverts, window.alert.error);
 
   };
 
