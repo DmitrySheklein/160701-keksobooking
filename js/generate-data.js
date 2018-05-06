@@ -46,7 +46,7 @@
         offer: {
           title: OFFER_TITLES[i],
           address: locationX + ", " + locationY,
-          price: getRandomNum(1000, 1000000),
+          price: getRandomNum(1000, 60000),
           type: offerTypesKeys[getRandomNum(0, offerTypesKeys.length)],
           rooms: getRandomNum(1, 5),
           guests: getRandomNum(1, 5),
