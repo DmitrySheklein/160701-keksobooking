@@ -60,7 +60,7 @@
     var map = document.querySelector(".map");
     var mapFilterContainer = map.querySelector(".map__filters-container");
 
-    for (let i = 0; i < arr.length; i++) {
+    for (var i = 0; i < arr.length; i++) {
       mapAdsFragment.appendChild(createAd(arr[i], i));
     }
 

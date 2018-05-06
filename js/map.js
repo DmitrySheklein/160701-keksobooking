@@ -8,14 +8,14 @@
   var map = document.querySelector(".map");
   var form = document.querySelector(".ad-form");
 
-  var disabledFields = function(boolean) {
+  var changeDisabledFields = function(boolean) {
     var fieldset = document.querySelectorAll("fieldset");
     for (var i = 0; i < fieldset.length; i++) {
       fieldset[i].disabled = boolean;
     }
   };
 
-  disabledFields(true);
+  changeDisabledFields(true);
 
   var mapMainPinCoords = { x: Math.floor(mapMainPin.offsetLeft + MAIN_PIN_WIDTH / 2), y: Math.floor(mapMainPin.offsetTop + MAIN_PIN_HEIGTH / 2) };
 
@@ -28,12 +28,16 @@
   };
 
   var activatePage = function() {
+    if (!map.classList.contains('map--faded')) {
+      return;
+    }
     map.classList.remove("map--faded");
     form.classList.remove("ad-form--disabled");
-    disabledFields(false);
+    changeDisabledFields(false);
 
-    window.renderPins(window.generateData(ADS_QUANTITY));
-    window.renderAdverts(window.generateData(ADS_QUANTITY));
+    var generateData = window.generateData(ADS_QUANTITY);
+    window.renderPins(generateData);
+    window.renderAdverts(generateData);
 
     var mapPins = document.querySelectorAll(".map__pin:not(.map__pin--main)");
 
@@ -86,14 +90,13 @@
       if (mapMainPin.offsetTop < limit.top) {
         mapMainPin.style.top = limit.top + "px";
       } else if (mapMainPin.offsetTop + MAIN_PIN_HEIGTH > limit.bottom) {
-        mapMainPin.style.top = limit.bottom + "px";
+        mapMainPin.style.top = limit.bottom - MAIN_PIN_HEIGTH + "px";
       }
 
       if (mapMainPin.offsetLeft + pinHalfWidth < 0) {
         mapMainPin.style.left = 0 - pinHalfWidth + "px";
       } else if (mapMainPin.offsetLeft + pinHalfWidth > map.offsetWidth) {
-        mapMainPin.style.left = map.offsetWidth - pinHalfWidth;
-        console.log("more then map.offset", mapMainPin.style.left);
+        mapMainPin.style.left = map.offsetWidth - pinHalfWidth + 'px';
       }
 
       updateMapMainPinCoords();
