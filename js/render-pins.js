@@ -29,8 +29,8 @@
     var mapPins = document.querySelector(".map__pins");
     var pinTemplate = document.querySelector("template").content;
 
-    for (var i = 0; i < ADS_QUANTITY; i++) {
-      var pinItem = pinTemplate.querySelector('.map__pin').cloneNode(true);
+    for (var i = 0; i < arr.length; i++) {
+      var pinItem = pinTemplate.querySelector(".map__pin").cloneNode(true);
       pinItem.dataset.markerIndex = i;
       pinItem.style.left = arr[i].location.x + "px";
       pinItem.style.top = arr[i].location.y + "px";

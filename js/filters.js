@@ -39,7 +39,6 @@
           // Если это фильтр по цене
           if (filterName == "price") {
             newArr = newArr.filter(function(item) {
-              // console.log(filterHousingPrice(obj[key], item.offer["price"]));
               var isGoodPrice = filterHousingPrice(obj[key], item.offer["price"]);
               return item.offer[filterName] == isGoodPrice;
             });
@@ -112,7 +111,7 @@
     return newArr;
   }
 
-  var data = window.generateData(5);
+
   var onMapFiltersChange = function (evt) {
     var element = evt.target;
     var value = element.value;
@@ -133,7 +132,10 @@
     }
 
     // Запуск функции сортировки
-    window.filtering(filtersDefaults, data);
+    window.state.deleteMapContent();
+    var sortData = window.filtering(filtersDefaults, window.data.content);
+    window.renderPins(sortData);
+    window.renderAdverts(sortData);
   }
 
 

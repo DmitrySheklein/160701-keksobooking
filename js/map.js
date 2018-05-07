@@ -22,6 +22,7 @@
     var getContent = function (data) {
           window.renderPins(data);
           window.renderAdverts(data);
+          window.data.content = data;
     }
     window.backend.load(getContent, window.alert.error);
 
