@@ -56,31 +56,7 @@
 
       }
     }
-    // Дебаг
-    newArr.forEach(function(item, i){
-      if (i == 0) {
-        console.log('///////');
 
-      }
-      var msg = i
-          msg += ' --- Тип - '
-          msg += item.offer.type
-          msg += ' Цена - '
-          msg += item.offer.price
-          msg += ' Фичи  {'
-          msg += item.offer.features.join('|')
-          msg += '}'
-          console.log(msg);
-      if (i == newArr.length -1 ) {
-        console.log("///////");
-      }
-    })
-
-
-    if (newArr.length == 0) {
-      console.log('нет совпадений');
-    }
-    //
     function filterHousingPrice (type, price) {
       var minPrice = 0;
       var middlePrice = 10000;
