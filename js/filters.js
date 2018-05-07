@@ -5,72 +5,83 @@
 
   var mapFilters = document.querySelector('.map__filters');
   var mapPinsBlock = document.querySelectorAll('.map__pins');
-  var houseType = mapFilters.querySelector('#housing-type');
-  var housePrice = mapFilters.querySelector('#housing-price');
-  var houseRooms = mapFilters.querySelector('#housing-rooms');
-  var houseGuests = mapFilters.querySelector('#housing-guests');
   var featuresSelector = mapFilters.querySelector('.map__features');
-  var filterWifi = featuresSelector.querySelector('#filter-wifi');
-  var filterDishwasher = featuresSelector.querySelector('#filter-dishwasher');
-  var filterParking = featuresSelector.querySelector('#filter-parking');
-  var filterWasher = featuresSelector.querySelector('#filter-washer');
-  var filterElevator = featuresSelector.querySelector('#filter-elevator');
-  var filterConditioner = featuresSelector.querySelector('#filter-conditioner');
-
   var typeCheckboxSelect = featuresSelector.querySelectorAll('[type="checkbox"]');
+  var selects = mapFilters.querySelectorAll('select');
 
   var filtersDefaults = {
     'housing-type': 'any',
     'housing-price': 'any',
     'housing-rooms': 'any',
-    'housing-guests': 'any'
-  };
-
-  var filtersFeaturesDefaults = {
+    'housing-guests': 'any',
     'filter-wifi': false,
     'filter-dishwasher': false,
     'filter-parking': false,
     'filter-washer': false,
-    'filter-elevator' : false,
+    'filter-elevator': false,
     'filter-conditioner': false
+
   };
 
-  var featuresClassListMap = {
-    'filter-wifi': 'wifi',
-    'filter-dishwasher': 'dishwasher',
-    'filter-parking': 'parking',
-    'filter-washer': 'washer',
-    'filter-elevator': 'elevator',
-    'filter-conditioner': 'conditioner'
-   };
 
-  var filtering = function (obj,arr) {
+  window.filtering = function (obj,arr) {
     var newArr = arr.slice();
+
     for( var key in obj) {
       if (obj[key] !== false && obj[key] !== "any") {
+        // Обычный селект
         var filterName = key.replace("housing-", '');
-
-          newArr = newArr.filter(function(item) {
-            return item.offer[filterName] == obj[key];
-          });
-          console.log("ok", newArr);
-
+        // Если это чекбокс фильтр
+        var isFilter = filterName.indexOf('filter-') !== -1;
+        if (isFilter) {
+          filterName = key.replace("filter-", '')
+        }
+          // Если это фильтр по цене
           if (filterName == "price") {
-            console.log("ok-price", newArr);
             newArr = newArr.filter(function(item) {
-              console.log(filterHousingPrice(obj[key], item.offer["price"]));
-              // var isGoodPrice = filterHousingPrice(obj[key], item.offer["price"]);
-              return item.offer[filterName] == filterHousingPrice(obj[key], item.offer["price"]);
+              // console.log(filterHousingPrice(obj[key], item.offer["price"]));
+              var isGoodPrice = filterHousingPrice(obj[key], item.offer["price"]);
+              return item.offer[filterName] == isGoodPrice;
+            });
+            //Если это фильтр по фичам
+          } else if (isFilter) {
+            newArr = newArr.filter(function (item) {
+              return item.offer.features.indexOf(filterName) !== -1;
+            });
+            //Стандарт
+          }  else {
+            newArr = newArr.filter(function(item) {
+              return item.offer[filterName] == obj[key];
             });
           }
 
-
-
-
       }
     }
-    // console.log(newArr);
+    // Дебаг
+    newArr.forEach(function(item, i){
+      if (i == 0) {
+        console.log('///////');
 
+      }
+      var msg = i
+          msg += ' --- Тип - '
+          msg += item.offer.type
+          msg += ' Цена - '
+          msg += item.offer.price
+          msg += ' Фичи  {'
+          msg += item.offer.features.join('|')
+          msg += '}'
+          console.log(msg);
+      if (i == newArr.length -1 ) {
+        console.log("///////");
+      }
+    })
+
+
+    if (newArr.length == 0) {
+      console.log('нет совпадений');
+    }
+    //
     function filterHousingPrice (type, price) {
       var minPrice = 0;
       var middlePrice = 10000;
@@ -98,7 +109,7 @@
       }
     };
 
-
+    return newArr;
   }
 
   var data = window.generateData(5);
@@ -106,14 +117,34 @@
     var element = evt.target;
     var value = element.value;
     var id = element.id;
+    var isCheckbox = evt.target.type === 'checkbox';
+    var isCheckboxChecked = element.checked;
 
-    filtersDefaults[id] = value;
-    filtering(filtersDefaults, data);
+    // Удаление и добавление значения в объекте, если это чекбокс
+    if (isCheckbox) {
+      if (isCheckboxChecked) {
+          filtersDefaults[id] = value;
+      }else {
+          filtersDefaults[id] = false;
+      }
+    //Иначе если селект
+    } else {
+      filtersDefaults[id] = value;
+    }
 
+    // Запуск функции сортировки
+    window.filtering(filtersDefaults, data);
   }
-  var selects = mapFilters.querySelectorAll('select');
+
+
   for (var i = 0; i < selects.length; i++) {
     selects[i].addEventListener("change", onMapFiltersChange);
   }
+
+  for (var i = 0; i < typeCheckboxSelect.length; i++) {
+    typeCheckboxSelect[i].addEventListener("change", onMapFiltersChange);
+  }
+
+
 })();
 
