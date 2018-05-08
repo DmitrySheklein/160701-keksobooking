@@ -8,6 +8,16 @@
         fieldset[i].disabled = boolean;
       }
     },
+    debounce : function (fun) {
+      var DEBOUNCE_INTERVAL = 300;
+      var lastTimeout;
+
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
+
+    },
     setAddress : function () {
         var mapMainPin = document.querySelector(".map__pin--main");
 

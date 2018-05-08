@@ -109,7 +109,9 @@
 
     // Запуск функции сортировки
     window.state.deleteMapContent();
-    var sortData = window.filtering(filtersDefaults, window.data.content);
+    var sortData = window.util.debounce(window.filtering(filtersDefaults, window.data.content));
+    console.log(sortData);
+
     window.renderPins(sortData);
     window.renderAdverts(sortData);
   }
