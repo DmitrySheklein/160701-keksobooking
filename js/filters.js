@@ -1,12 +1,9 @@
 'use strict';
 
 (function () {
-  var offerNumber = 5;
-
   var mapFilters = document.querySelector('.map__filters');
-  var mapPinsBlock = document.querySelectorAll('.map__pins');
   var featuresSelector = mapFilters.querySelector('.map__features');
-  var typeCheckboxSelect = featuresSelector.querySelectorAll('[type="checkbox"]');
+  var typeCheckboxSelect = featuresSelector.querySelectorAll('[type=checkbox]');
   var selects = mapFilters.querySelectorAll('select');
 
   var filtersDefaults = {
@@ -24,56 +21,53 @@
   };
 
 
-  window.filtering = function (obj,arr) {
+  window.filtering = function (obj, arr) {
     var newArr = arr.slice();
 
-    for( var key in obj) {
-      if (obj[key] !== false && obj[key] !== "any") {
+    for (var key in obj) {
+      if (obj[key] !== false && obj[key] !== 'any') {
         // Обычный селект
-        var filterName = key.replace("housing-", '');
+        var filterName = key.replace('housing-', '');
         // Если это чекбокс фильтр
         var isFilter = filterName.indexOf('filter-') !== -1;
         if (isFilter) {
-          filterName = key.replace("filter-", '')
+          filterName = key.replace('filter-', '');
         }
-          // Если это фильтр по цене
-          if (filterName == "price") {
-            newArr = newArr.filter(function(item) {
-              var isGoodPrice = filterHousingPrice(obj[key], item.offer["price"]);
-              return item.offer[filterName] == isGoodPrice;
-            });
-            //Если это фильтр по фичам
-          } else if (isFilter) {
-            newArr = newArr.filter(function (item) {
-              return item.offer.features.indexOf(filterName) !== -1;
-            });
-            //Стандарт
-          }  else {
-            newArr = newArr.filter(function(item) {
-              return item.offer[filterName] == obj[key];
-            });
-          }
+        // Если это фильтр по цене
+        if (filterName === 'price') {
+          newArr = newArr.filter(function (item) {
+            var isGoodPrice = filterHousingPrice(obj[key], item.offer['price']);
+            return item.offer[filterName] === isGoodPrice;
+          });
+        } else if (isFilter) {
+          newArr = newArr.filter(function (item) {
+            return item.offer.features.indexOf(filterName) !== -1;
+          });
+        } else {
+          newArr = newArr.filter(function (item) {
+            return item.offer[filterName] === obj[key];
+          });
+        }
 
       }
     }
 
-    function filterHousingPrice (type, price) {
-      var minPrice = 0;
+    function filterHousingPrice(type, price) {
       var middlePrice = 10000;
       var maxPrice = 50000;
       var priceVal = false;
 
       switch (type) {
-        case "any":
+        case 'any':
           priceVal = true;
           break;
-        case "low":
+        case 'low':
           priceVal = price <= middlePrice;
           break;
-        case "middle":
+        case 'middle':
           priceVal = price >= middlePrice && price <= maxPrice;
           break;
-        case "high":
+        case 'high':
           priceVal = price >= maxPrice;
           break;
         default:
@@ -82,10 +76,11 @@
       if (priceVal) {
         return price;
       }
-    };
+      return false;
+    }
 
     return newArr;
-  }
+  };
 
 
   var onMapFiltersChange = function (evt) {
@@ -98,11 +93,10 @@
     // Удаление и добавление значения в объекте, если это чекбокс
     if (isCheckbox) {
       if (isCheckboxChecked) {
-          filtersDefaults[id] = value;
-      }else {
-          filtersDefaults[id] = false;
+        filtersDefaults[id] = value;
+      } else {
+        filtersDefaults[id] = false;
       }
-    //Иначе если селект
     } else {
       filtersDefaults[id] = value;
     }
@@ -112,20 +106,19 @@
     var sortData = window.filtering(filtersDefaults, window.data.content);
     window.renderPins(sortData);
     window.renderAdverts(sortData);
-  }
+  };
 
   function eventListenerWrap(evt) {
-    window.util.debounce(evt, onMapFiltersChange)
+    window.util.debounce(evt, onMapFiltersChange);
   }
 
   for (var i = 0; i < selects.length; i++) {
-    selects[i].addEventListener("change", eventListenerWrap);
+    selects[i].addEventListener('change', eventListenerWrap);
   }
 
-  for (var i = 0; i < typeCheckboxSelect.length; i++) {
-    typeCheckboxSelect[i].addEventListener("change", eventListenerWrap);
+  for (i = 0; i < typeCheckboxSelect.length; i++) {
+    typeCheckboxSelect[i].addEventListener('change', eventListenerWrap);
   }
 
 
 })();
-

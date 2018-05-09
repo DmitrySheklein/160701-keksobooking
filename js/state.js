@@ -3,7 +3,6 @@
 (function () {
   var map = document.querySelector('.map');
   var form = document.querySelector('.ad-form');
-  var formResetBtn = form.querySelector('.ad-form__reset');
 
   window.state = {
     deleteMapContent: function () {
@@ -17,12 +16,12 @@
       }
     },
     reset: function () {
-      map.classList.add("map--faded");
-      form.classList.add("ad-form--disabled");
+      map.classList.add('map--faded');
+      form.classList.add('ad-form--disabled');
       form.reset();
       window.util.changeDisabledFields(true);
       window.util.setAddress().resetPin();
       window.state.deleteMapContent();
     }
-  }
+  };
 })();
