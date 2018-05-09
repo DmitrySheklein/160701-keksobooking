@@ -109,20 +109,21 @@
 
     // Запуск функции сортировки
     window.state.deleteMapContent();
-    var sortData = window.util.debounce(window.filtering(filtersDefaults, window.data.content));
-    console.log(sortData);
-
+    var sortData = window.filtering(filtersDefaults, window.data.content);
     window.renderPins(sortData);
     window.renderAdverts(sortData);
   }
 
+  function eventListenerWrap(evt) {
+    window.util.debounce(evt, onMapFiltersChange)
+  }
 
   for (var i = 0; i < selects.length; i++) {
-    selects[i].addEventListener("change", onMapFiltersChange);
+    selects[i].addEventListener("change", eventListenerWrap);
   }
 
   for (var i = 0; i < typeCheckboxSelect.length; i++) {
-    typeCheckboxSelect[i].addEventListener("change", onMapFiltersChange);
+    typeCheckboxSelect[i].addEventListener("change", eventListenerWrap);
   }
 
 

@@ -8,14 +8,17 @@
         fieldset[i].disabled = boolean;
       }
     },
-    debounce : function (fun) {
+    debounce : function (evt,fun) {
       var DEBOUNCE_INTERVAL = 300;
       var lastTimeout;
 
       if (lastTimeout) {
         window.clearTimeout(lastTimeout);
       }
-      lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
+      function timeOutWraper() {
+        fun(evt)
+      }
+      lastTimeout = window.setTimeout(timeOutWraper, DEBOUNCE_INTERVAL);
 
     },
     setAddress : function () {
