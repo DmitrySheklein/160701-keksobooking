@@ -13,10 +13,9 @@
       window.state.reset();
     },
     error: function (errorMsg) {
-      console.log(errorMsg);
       var deleteError = function () {
         document.querySelector('.error-message').remove();
-      }
+      };
 
       var errorBlock = document.createElement('div');
       errorBlock.classList.add('error-message');
@@ -24,5 +23,5 @@
       document.body.appendChild(errorBlock);
       setTimeout(deleteError, TIMEOUT);
     }
-  }
+  };
 })();
